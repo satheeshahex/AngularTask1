@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            
+        </div>
+        <div class="col-md-6">
+            <br>
+            <br>
+            <br>
+            <h4>Paytm</h4>
+            <div class="card">
+                <div style="padding:20px">
+                    <form [formGroup]="paytmForm">
+                        <div class="form-group">
+                            <label for="">Name: </label>
+                            <input 
+                            class="form-control"
+                            formControlName="name"
+                            type="text"
+                             name="name"
+                             value="">
+                          </div>
+                          <div class="form-group">
+                            <label for="">Email: </label>
+                            <input
+                             class="form-control"
+                              type="text" formControlName="email" 
+                              name="email" 
+                              value=""
+                              >
+                          </div>
+                          <div class="form-group">
+                            <label for="">Phone: </label>
+                            <input 
+                            class="form-control"
+                            type="text" 
+                            formControlName="phone" 
+                            name="phone" 
+                            value="">
+                          </div>
+                            <div class="form-group">
+                            <label for="">Amount: </label>
+                            <input 
+                            class="form-control" 
+                            type="text" 
+                            formControlName="amount" 
+                            name="amount" 
+                            value="">
+                        </div>
+                        <div class="form-group">
+                          <button class="btn form-control btn-primary" type="submit" (click)="onsubmit()">Pay Now</button>
+                        </div>
+                      </form>
+                      <p>{{List  | json}}</p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

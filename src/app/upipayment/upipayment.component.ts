@@ -62,4 +62,5 @@ export class UpipaymentComponent implements OnInit {
 onError=(event :ErrorEvent):void =>{
   console.error('error',event.error)
 }
+
 }

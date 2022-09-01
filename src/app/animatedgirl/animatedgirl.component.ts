@@ -7,7 +7,13 @@ import * as THREE from 'three'
   styleUrls: ['./animatedgirl.component.css']
 })
 export class AnimatedgirlComponent implements OnInit,AfterViewInit {
+val:any;
+isLabel="Start"
 
+ initAnim = true;
+ runAnim = false;
+ isPlay = false;
+theta = 0;
   @ViewChild('canvas')
   private canvasRef: ElementRef | undefined;
 
@@ -35,12 +41,13 @@ export class AnimatedgirlComponent implements OnInit,AfterViewInit {
   //? Helper Properties (Private Properties);
 
   private camera!: THREE.PerspectiveCamera;
+ 
 
   private get canvas(): HTMLCanvasElement {
     return this.canvasRef?.nativeElement;
   }
   private loader = new THREE.TextureLoader();
-  private geometry = new THREE.BoxGeometry(1, 1, 1);
+  private geometry = new THREE.BoxGeometry(2, 2, 2);
   private material = new THREE.MeshBasicMaterial({ map: this.loader.load(this.texture)});
 
   private cube: THREE.Mesh = new THREE.Mesh(this.geometry, this.material);
@@ -49,50 +56,21 @@ export class AnimatedgirlComponent implements OnInit,AfterViewInit {
 
   private scene!: THREE.Scene;
 
-  /**
-   *Animate the cube
-   *
-   * @private
-   * @memberof AnimatedgirlComponent
-   */
-  private animateCube() {
-    this.cube.rotation.x += this.rotationSpeedX;
-    this.cube.rotation.y += this.rotationSpeedY;
-  }
-
-  /**
-   * Create the scene
-   *
-   * @private
-   * @memberof AnimatedgirlComponent
-   */
   private createScene() {
     //* Scene
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x000000)
     this.scene.add(this.cube);
     //*Camera
-    let aspectRatio = this.getAspectRatio();
-    this.camera = new THREE.PerspectiveCamera(
-      this.fieldOfView,
-      aspectRatio,
-      this.nearClippingPlane,
-      this.farClippingPlane
-    )
-    this.camera.position.z = this.cameraZ;
+  
+    this.camera = new THREE.PerspectiveCamera( 50, window.innerWidth / window.innerHeight, 1, 1000 );
+    this.camera.position.z = 5
   }
 
-  private getAspectRatio() {
-    return this.canvas.clientWidth / this.canvas.clientHeight;
-  }
+ 
 
-  /**
- * Start the rendering loop
- *
- * @private
- * @memberof AnimatedgirlComponent
- */
   private startRenderingLoop() {
+  
     //* Renderer
     // Use canvas element in template
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas });
@@ -100,21 +78,79 @@ export class AnimatedgirlComponent implements OnInit,AfterViewInit {
     this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
 
     let component: AnimatedgirlComponent = this;
-    (function render() {
+    function render() {
+      if (component.isPlay) return;
       requestAnimationFrame(render);
-      component.animateCube();
+   
       component.renderer.render(component.scene, component.camera);
-    }());
+      component.theta += 0.01;
+      
+    };
+    render()
+  
   }
 
   constructor() { }
 
   ngOnInit(): void {
 
+
   }
 
   ngAfterViewInit() {
+    
     this.createScene();
+    
     this.startRenderingLoop();
   }
+  OnStart(){
+
+    if (this.initAnim) {
+      this.initAnim = false;
+      this.runAnim = true;
+      this.theta = 0;
+    }
+    if (this.runAnim) { 
+      this.isLabel='Pause'
+      this.runAnim = false;
+      this.isPlay = true;
+      
+    let component: AnimatedgirlComponent = this;
+      function render() {
+        if (!component.isPlay) return;
+        requestAnimationFrame(render);
+        component.cube.rotation.x  += 0.01;
+        component.cube.rotation.y += 0.01;
+        component.renderer.render(component.scene, component.camera);
+        component.theta += 0.01;
+        
+      };
+      render()
+      } else {
+           this.isLabel='Resume'
+            this.runAnim = true;
+            this.isPlay = false;
+      }
+  }
+  onRest(){
+    this.isLabel='Start'
+     // Boolean for Stop Animation
+   this.initAnim = true;
+   this.runAnim = false;
+   this.theta = 0;
+   this.isPlay = false;
+   let component: AnimatedgirlComponent = this;
+   function render() {
+    if (component.isPlay) return;
+    requestAnimationFrame(render);
+    component.cube.rotation.y=0;
+    component.cube.rotation.x=0
+    component.renderer.render(component.scene, component.camera);
+    
+     
+   };
+   render()
+   }
+
+  
 }

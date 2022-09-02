@@ -12,7 +12,7 @@ import { PerspectiveCamera, Scene } from 'three';
 })
 export class AnimatedgirlComponent implements OnInit,AfterViewInit {
   isLabel="Start"
-  initial_value: number =0.1;
+  initial_value: number =0.01;
   initAnim = true;
   runAnim = false;
   isPlay = false;
@@ -183,12 +183,16 @@ export class AnimatedgirlComponent implements OnInit,AfterViewInit {
    
    
 
-     onIncrement(){
-this.initial_value=this.initial_value+0.01
+     onIncrement(val:any){
+      console.log( this.initial_value,'incafter')
+this.initial_value++
+console.log( this.initial_value,'incafter',this.model.rotation.z,'zzzzzzzzzzzzzz')
 
      }
-     onDecrement(){
-this.initial_value=this.initial_value-0.01
+     onDecrement(val:any){
+      console.log( this.initial_value,'incabter' ,Number(val))
+this.initial_value--
+console.log( this.initial_value,'incabter')
      }
    
      OnStart(){
@@ -209,9 +213,12 @@ this.initial_value=this.initial_value-0.01
            requestAnimationFrame(render);
            if (component.model) {
              console.log(component.model)
-           
+             
+             console.log( component.initial_value.toFixed(2))
+             console.log( component.model.rotation.z,'zzzzzzzzzzzzz',component.initial_value,'add',component.model.rotation.z,'zzzzzzzzzzzzzz')
+            //  alert('alert')
              component.model.rotation.z += component.initial_value
-             console.log( component.model.rotation.z)
+            
            }
            component.renderer.render(component.scene, component.camera);
           //  component.theta += 0.01;
@@ -240,7 +247,7 @@ this.initial_value=this.initial_value-0.01
         //  console.log(component.model)
         component.initial_value=0.1;
          component.model.rotation.z = component.initial_value;
-         
+ 
        }
        component.renderer.render(component.scene, component.camera);
        

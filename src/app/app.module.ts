@@ -7,6 +7,7 @@ import { BasicComponent } from './basic/basic.component';
 import { AnimatedgirlComponent } from './animatedgirl/animatedgirl.component';
 import { ModelComponent } from './model/model.component';
 import { ControlsComponent } from './controls/controls.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,8 @@ import { ControlsComponent } from './controls/controls.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule
+    
     
   ],
   providers: [],

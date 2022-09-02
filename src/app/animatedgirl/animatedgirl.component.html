@@ -1,19 +1,16 @@
-
 <div class="container">
-    <div class="row mt-5">
-        <div class="col-md-4 ">
-            <div class="form-group">
-                <button (click)="OnStart()" class="btn btn-primary btn-block">{{isLabel}}</button>
-
-            </div>
-            <div>
-                <button (click)="onRest()" class="btn btn-primary btn-block">Reset</button>
-            </div>
-
-        </div>
-        <div class="col-md-8">
-
+    <div class="row mt-5">        
+        <div class="col-md-9">
+        
             <canvas #canvas id="canvas" style="height: 100%; width: 100%;" ></canvas>
+            SPEED {{initial_value}}
+               <div class="form-group text-center">
+                    <button (click)="OnStart()" class="btn btn-primary"style="margin:10px;">{{isLabel}}</button>
+                    <button (click)="onRest()" class="btn btn-primary"style="margin:10px;">Reset</button>
+                    <app-controls (increament)="onIncrement()" (decrement)="onDecrement()" ></app-controls>
+               
+                </div>
+                
         </div>
     </div>
 </div>

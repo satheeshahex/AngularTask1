@@ -12,7 +12,13 @@ import { PerspectiveCamera, Scene } from 'three';
 })
  
   export class ModelComponent implements OnInit, AfterViewInit {
+    isLabel="Start"
   
+
+ initAnim = true;
+ runAnim = false;
+ isPlay = false;
+theta = 0;
     @ViewChild('canvas') private canvasRef: ElementRef | undefined;
   
     //* Stage Properties
@@ -50,7 +56,7 @@ import { PerspectiveCamera, Scene } from 'three';
   
     private loaderGLTF = new GLTFLoader();
   
-    private renderer: THREE.WebGLRenderer | undefined;
+    private renderer!: THREE.WebGLRenderer;
   
     private scene: THREE.Scene
     /**
@@ -82,8 +88,8 @@ import { PerspectiveCamera, Scene } from 'three';
     private createControls = () => {
       const renderer = new CSS2DRenderer();
       renderer.setSize(window.innerWidth, window.innerHeight);
-      renderer.domElement.style.position = 'absolute';
-      renderer.domElement.style.top = '0px';
+      // renderer.domElement.style.position = 'absolute';
+      // renderer.domElement.style.left = '20px';
       document.body.appendChild(renderer.domElement);
       this.controls = new OrbitControls(this.camera, renderer.domElement);
       this.controls.autoRotate = true;
@@ -104,7 +110,8 @@ import { PerspectiveCamera, Scene } from 'three';
         this.model = gltf.scene.children[0];
         console.log(this.model);
         var box = new THREE.Box3().setFromObject(this.model);
-        box.getCenter(this.model.position); // this re-sets the mesh position
+        box.getCenter(this.model.position);
+         // this re-sets the mesh position
         this.model.position.multiplyScalar(-1);
         this.scene.add(this.model);
       });
@@ -156,11 +163,15 @@ import { PerspectiveCamera, Scene } from 'three';
       this.renderer.setPixelRatio(devicePixelRatio);
       this.renderer.setSize(this.canvas.clientWidth, this.canvas.clientHeight);
       let component: ModelComponent = this;
-      (function render() {
-        component?.renderer?.render(component.scene, component.camera);
-        component.animateModel();
+      function render() {
+        if (component.isPlay) return;
         requestAnimationFrame(render);
-      }());
+       
+        component.renderer?.render(component.scene, component.camera);
+        component.theta += 0.01;
+        
+      };
+      render()
     }
   
     constructor() { }
@@ -176,5 +187,58 @@ import { PerspectiveCamera, Scene } from 'three';
     }
   
   
+  
+    OnStart(){
+
+      if (this.initAnim) {
+        this.initAnim = false;
+        this.runAnim = true;
+        this.theta = 0;
+      }
+      if (this.runAnim) { 
+        this.isLabel='Pause'
+        this.runAnim = false;
+        this.isPlay = true;
+        
+      let component: ModelComponent = this;
+        function render() {
+          if (!component.isPlay) return;
+          requestAnimationFrame(render);
+          if (component.model) {
+            console.log(component.model)
+            component.model.rotation.z += 0.005;
+          }
+          component.renderer.render(component.scene, component.camera);
+          component.theta += 0.01;
+          
+        };
+        render()
+        } else {
+             this.isLabel='Resume'
+              this.runAnim = true;
+              this.isPlay = false;
+        }
+    }
+    onRest(){
+      this.isLabel='Start'
+       // Boolean for Stop Animation
+     this.initAnim = true;
+     this.runAnim = false;
+     this.theta = 0;
+     this.isPlay = false;
+     let component:ModelComponent = this;
+     function render() {
+      if (component.isPlay) return;
+      requestAnimationFrame(render);
+      if (component.model) {
+        console.log(component.model)
+        component.model.rotation.z = 0;
+      }
+      component.renderer.render(component.scene, component.camera);
+      
+       
+     };
+     render()
+     }
 
 }

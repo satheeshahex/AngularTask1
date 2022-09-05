@@ -4,6 +4,10 @@ import { GLTFLoader, GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { CSS2DRenderer } from 'three/examples/jsm/renderers/CSS2DRenderer.js';
 import { PerspectiveCamera, Scene } from 'three';
+import { of } from 'rxjs';
+import { AnimatedService } from '../service/animated.service';
+
+
 
 @Component({
   selector: 'app-animatedgirl',
@@ -15,6 +19,10 @@ export class AnimatedgirlComponent implements OnInit,AfterViewInit {
   initial_value: number =0.01;
   initAnim = true;
   runAnim = false;
+
+  looping:any;
+ mutant:any;
+
   isPlay = false;
  theta = 0;
      @ViewChild('canvas') private canvasRef: ElementRef | undefined;
@@ -47,6 +55,7 @@ export class AnimatedgirlComponent implements OnInit,AfterViewInit {
      private directionalLight: THREE.DirectionalLight | undefined;
    
      //? Helper Properties (Private Properties);
+     constructor(private _animatedService:AnimatedService) { }
    
      private get canvas(): HTMLCanvasElement {
        return this.canvasRef?.nativeElement;
@@ -73,10 +82,10 @@ export class AnimatedgirlComponent implements OnInit,AfterViewInit {
    
    
      private createControls = () => {
-       const renderer = new CSS2DRenderer();
-      // const renderer = new THREE.WebGLRenderer({
-      //   canvas:this.canvasRef?.nativeElement
-      // });
+      //  const renderer = new CSS2DRenderer();
+      const renderer = new THREE.WebGLRenderer({
+        canvas:this.canvasRef?.nativeElement
+      });
       //  renderer.setSize( window.innerWidth, window.innerHeight );
     
      
@@ -96,18 +105,42 @@ export class AnimatedgirlComponent implements OnInit,AfterViewInit {
      
       */
      private createScene() {
-       //* Scene
-       this.scene = new THREE.Scene();
-       this.scene.background =  new THREE.Color(0x000000)
-       this.loaderGLTF.load('assets/robot/scene.gltf', (gltf: GLTF) => {
-         this.model = gltf.scene.children[0];
+    
+    
+        const array1 = ['assets/robot/scene.gltf', 'assets/robot/scene.gltf', 'assets/robot/scene.gltf'];
+        this.scene = new THREE.Scene();
+        this.scene.background =  new THREE.Color(0x000000)
+        array1.forEach((element:any) => {
+          console.log(element,'yty')
+          
+            this.loaderGLTF.load(element,(gltf:GLTF)=>{
+              console.log(gltf)
+              this.model = gltf.scene.children[0];
+            
+                var box = new THREE.Box3().setFromObject(this.model);
+                box.getCenter(this.model.position);
+                //  this re-sets the mesh position
+                this.model.position.multiplyScalar(-1);
+               
+                this.scene.add(this.model);
+              });
+        
+          
+        });
      
-         var box = new THREE.Box3().setFromObject(this.model);
-         box.getCenter(this.model.position);
-          // this re-sets the mesh position
-         this.model.position.multiplyScalar(-1);
-         this.scene.add(this.model);
-       });
+
+
+      
+   
+       //* Scene
+    
+      
+     
+       
+
+       
+      
+     
        //*Camera
        let aspectRatio = this.getAspectRatio();
        this.camera = new THREE.PerspectiveCamera(
@@ -167,7 +200,7 @@ export class AnimatedgirlComponent implements OnInit,AfterViewInit {
        render()
      }
    
-     constructor() { }
+  
    
      ngOnInit(): void {
    
@@ -184,18 +217,16 @@ export class AnimatedgirlComponent implements OnInit,AfterViewInit {
    
 
      onIncrement(val:any){
-      console.log( this.initial_value,'incafter')
 this.initial_value++
-console.log( this.initial_value,'incafter',this.model.rotation.z,'zzzzzzzzzzzzzz')
 
      }
      onDecrement(val:any){
-      console.log( this.initial_value,'incabter' ,Number(val))
+   
 this.initial_value--
-console.log( this.initial_value,'incabter')
      }
    
      OnStart(){
+      
  
        if (this.initAnim) {
          this.initAnim = false;
@@ -206,18 +237,15 @@ console.log( this.initial_value,'incabter')
          this.isLabel='Pause'
          this.runAnim = false;
          this.isPlay = true;
-         console.log(this.initial_value,'number')
+
        let component: AnimatedgirlComponent = this;
          function render() {
+   
            if (!component.isPlay) return;
+
            requestAnimationFrame(render);
            if (component.model) {
-             console.log(component.model)
-             
-             console.log( component.initial_value.toFixed(2))
-             console.log( component.model.rotation.z,'zzzzzzzzzzzzz',component.initial_value,'add',component.model.rotation.z,'zzzzzzzzzzzzzz')
-            //  alert('alert')
-             component.model.rotation.z += component.initial_value
+              component.model.rotation.z += component.initial_value
             
            }
            component.renderer.render(component.scene, component.camera);

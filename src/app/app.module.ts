@@ -8,6 +8,9 @@ import { AnimatedgirlComponent } from './animatedgirl/animatedgirl.component';
 import { ModelComponent } from './model/model.component';
 import { ControlsComponent } from './controls/controls.component';
 import { FormsModule } from '@angular/forms';
+import { TestingComponent } from './testing/testing.component';
+import { Testing2Component } from './testing2/testing2.component';
+import { Testing3Component } from './testing3/testing3.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +18,10 @@ import { FormsModule } from '@angular/forms';
     BasicComponent,
     AnimatedgirlComponent,
     ModelComponent,
-    ControlsComponent
+    ControlsComponent,
+    TestingComponent,
+    Testing2Component,
+    Testing3Component
   ],
   imports: [
     BrowserModule,

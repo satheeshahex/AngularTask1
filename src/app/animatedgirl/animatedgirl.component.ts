@@ -107,7 +107,7 @@ export class AnimatedgirlComponent implements OnInit,AfterViewInit {
      private createScene() {
     
     
-        const array1 = ['assets/robot/scene.gltf', 'assets/robot/scene.gltf', 'assets/robot/scene.gltf'];
+        const array1 = ['assets/robot/scene.gltf', 'assets/robot/scene.gltf'];
         this.scene = new THREE.Scene();
         this.scene.background =  new THREE.Color(0x000000)
         array1.forEach((element:any) => {

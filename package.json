@@ -18,7 +18,7 @@
     "@angular/platform-browser": "~13.0.0",
     "@angular/platform-browser-dynamic": "~13.0.0",
     "@angular/router": "~13.0.0",
-    "@types/three": "^0.143.1",
+    "@types/three": "^0.182.0",
     "dat.gui": "^0.7.9",
     "ngx-three": "^0.20.0",
     "rxjs": "~7.4.0",
